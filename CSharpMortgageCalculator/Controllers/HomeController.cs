@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using CSharpMortgageCalculator.Helpers;
 
 namespace CSharpMortgageCalculator.Controllers
 {
@@ -28,6 +29,7 @@ namespace CSharpMortgageCalculator.Controllers
             return View();
         }
 
+        
         public IActionResult App()
         {
             Loan loan = new();
@@ -40,6 +42,18 @@ namespace CSharpMortgageCalculator.Controllers
             loan.Term = 60;
 
             return View(loan);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult App(Loan loan)
+        {
+            //Calculate the loan and get the payments
+            var loanHelper = new LoanHelper();
+
+            Loan newloan = loanHelper.GetPayments(loan);
+
+            return View(newloan);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
